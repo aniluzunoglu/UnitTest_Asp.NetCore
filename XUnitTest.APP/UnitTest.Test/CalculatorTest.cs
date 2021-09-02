@@ -9,20 +9,25 @@ using Xunit;
 namespace UnitTest.Test {
     public class CalculatorTest {
 
+        public Calculator calculator { get; set; }
+
+        public CalculatorTest() {
+            this.calculator = new Calculator();
+        }
+
         [Fact]
-        public void SumTest() {
+        public void Sum_SimpleValues_ReturnTotalValue() {
             //Arrange
 
             //değişkenleri initialize ettiğimiz yer. İlk değer vereceğim veya nesne örneği oluşturacağım yer
 
             int a = 5;
             int b = 20;
-            var calculator = new Calculator();
             //Act
 
             //initialize ettiğimiz classlara parametreler verip test edeceğimiz methodları çalıştırdığımız yer.
 
-            var total = calculator.sum(a, b);
+            var total = calculator.Sum(a, b);
 
             //Assert 
 
@@ -38,7 +43,6 @@ namespace UnitTest.Test {
             string regex = "^dog";
             string val = null;
 
-            List<string> test;
             // Act            
 
             // Assert
@@ -74,11 +78,52 @@ namespace UnitTest.Test {
             Assert.IsAssignableFrom<IEnumerable<string>>(names);
             Assert.IsAssignableFrom<object>("Anıl");
 
-            Assert.Null(val);            
+            Assert.Null(val);
             Assert.NotNull(names);
 
             Assert.Equal<int>(2, 2);
             Assert.NotEqual<int>(2, 6);
+        }
+
+        [Theory]
+        [InlineData(2, 5, 7)]
+        [InlineData(10, 5, 15)]
+        public void Sum_SimpleValues_ReturnTotalValue_2(int a, int b, int expectedTotal) {
+            // Arrange            
+
+            // Act
+            var result = calculator.Sum(a, b);
+
+            // Assert
+            Assert.Equal(expectedTotal, result);
+        }
+
+        [Theory]
+        [InlineData(2, 5, 10)]
+        [InlineData(10, 5, 50)]
+        public void Multiplate_SimpleValues_ReturnMultiplatedValue(int a, int b, int expectedMultiplication) {
+            // Arrange
+
+            // Act
+            var result = calculator.Multiplate(a,b);
+
+            // Assert
+
+            Assert.Equal(expectedMultiplication, result);
+        }
+
+        [Theory]
+        [InlineData(0, 5, 0)]
+        [InlineData(10, 0, 0)]
+        public void Multiplate_ZeroValues_ReturnZeroValue(int a, int b, int expectedMultiplication) {
+            // Arrange
+
+            // Act
+            var result = calculator.Multiplate(a, b);
+
+            // Assert
+
+            Assert.Equal(expectedMultiplication, result);
         }
     }
 }
