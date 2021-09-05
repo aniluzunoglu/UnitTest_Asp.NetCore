@@ -5,24 +5,28 @@ using System.Text;
 using System.Threading.Tasks;
 using UnitTest.APP;
 using Xunit;
+using Moq;
 
 namespace UnitTest.Test {
     public class CalculatorTest {
 
         public Calculator calculator { get; set; }
+        public Mock<ICalculatorService> myMock { get; set; }
 
         public CalculatorTest() {
-            this.calculator = null;
+            myMock = new Mock<ICalculatorService>();
+            this.calculator = new Calculator(myMock.Object);
         }
 
         [Fact]
         public void Sum_SimpleValues_ReturnTotalValue() {
             //Arrange
-
+            
             //değişkenleri initialize ettiğimiz yer. İlk değer vereceğim veya nesne örneği oluşturacağım yer
 
             int a = 5;
             int b = 20;
+            myMock.Setup(c => c.Add(a, b)).Returns(25);
             //Act
 
             //initialize ettiğimiz classlara parametreler verip test edeceğimiz methodları çalıştırdığımız yer.
@@ -90,7 +94,7 @@ namespace UnitTest.Test {
         [InlineData(10, 5, 15)]
         public void Sum_SimpleValues_ReturnTotalValue_2(int a, int b, int expectedTotal) {
             // Arrange            
-
+            myMock.Setup(c => c.Add(a, b)).Returns(expectedTotal);
             // Act
             var result = calculator.Sum(a, b);
 
@@ -103,7 +107,7 @@ namespace UnitTest.Test {
         [InlineData(10, 5, 50)]
         public void Multiplate_SimpleValues_ReturnMultiplatedValue(int a, int b, int expectedMultiplication) {
             // Arrange
-
+            myMock.Setup(c => c.Multiplate(a, b)).Returns(expectedMultiplication);
             // Act
             var result = calculator.Multiplate(a, b);
 
@@ -117,7 +121,7 @@ namespace UnitTest.Test {
         [InlineData(10, 0, 0)]
         public void Multiplate_ZeroValues_ReturnZeroValue(int a, int b, int expectedMultiplication) {
             // Arrange
-
+            myMock.Setup(c => c.Multiplate(a, b)).Returns(expectedMultiplication);
             // Act
             var result = calculator.Multiplate(a, b);
 
@@ -128,6 +132,20 @@ namespace UnitTest.Test {
 
         //Mock : Interface veya classların davranışlarını taklit etmemizi mümkün kılan objelerdir.
         //       Test içerisindeki kodların gerçek dünyadaymış gibi çalışmasını mocklar sayesinde sağlayabiliriz.
+
+        [Theory]
+        [InlineData(2, 5, 7)]
+        [InlineData(10, 5, 15)]
+        public void Sum_SimpleValues_ReturnTotalValue_3(int a, int b, int expectedTotal) {
+            // Arrange           
+          
+            myMock.Setup(c => c.Add(a, b)).Returns(expectedTotal);
+            // Act
+            var result = calculator.Sum(a, b);
+
+            // Assert
+            Assert.Equal(expectedTotal, result);
+        }
 
 
     }
