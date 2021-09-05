@@ -12,7 +12,7 @@ namespace UnitTest.Test {
         public Calculator calculator { get; set; }
 
         public CalculatorTest() {
-            this.calculator = new Calculator();
+            this.calculator = null;
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace UnitTest.Test {
             // Arrange
 
             // Act
-            var result = calculator.Multiplate(a,b);
+            var result = calculator.Multiplate(a, b);
 
             // Assert
 
@@ -125,5 +125,10 @@ namespace UnitTest.Test {
 
             Assert.Equal(expectedMultiplication, result);
         }
+
+        //Mock : Interface veya classların davranışlarını taklit etmemizi mümkün kılan objelerdir.
+        //       Test içerisindeki kodların gerçek dünyadaymış gibi çalışmasını mocklar sayesinde sağlayabiliriz.
+
+
     }
 }
