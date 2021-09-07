@@ -137,16 +137,32 @@ namespace UnitTest.Test {
         [InlineData(2, 5, 7)]
         [InlineData(10, 5, 15)]
         public void Sum_SimpleValues_ReturnTotalValue_3(int a, int b, int expectedTotal) {
-            // Arrange           
-          
+            // Arrange                
             myMock.Setup(c => c.Add(a, b)).Returns(expectedTotal);
             // Act
             var result = calculator.Sum(a, b);
-
             // Assert
             Assert.Equal(expectedTotal, result);
+            myMock.Verify(c => c.Add(a, b), Times.Once);
+            myMock.Verify(c => c.Add(a, b), Times.AtMost(2));
+            myMock.Verify(c => c.Add(a, b), Times.AtLeast(1));
         }
 
+        /*
+        -> Verify(): Bir methodun kaç kez çalışığını test etmek için kullanılır.
 
+         */
+
+        [Theory]
+        [InlineData(5,0)]
+        public void Divide_ZeroDivisor_ThrowsDivideByZeroException(int a, int b) {
+            // Arrange
+            myMock.Setup(c => c.Divide(a, b)).Throws(new DivideByZeroException("0'a bölme işlemi yapılamaz"));
+            // Act
+            //var result = calculator.Divide(a,b);
+            // Assert
+            DivideByZeroException ex = Assert.Throws<DivideByZeroException>(() => calculator.Divide(a, b));
+            Assert.Equal("0'a bölme işlemi yapılamaz", ex.Message);
+        }
     }
 }

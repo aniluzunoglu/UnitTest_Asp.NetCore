@@ -20,5 +20,10 @@ namespace UnitTest.APP {
         public int Multiplate(int a, int b) {
             return _calculatorService.Multiplate(a, b);
         }
+
+        public decimal Divide(int a, int b) {
+            return _calculatorService.Divide(a, b);
+        }
+
     }
 }
