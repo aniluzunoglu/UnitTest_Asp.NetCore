@@ -21,7 +21,7 @@ namespace UnitTest.Test {
         [Fact]
         public void Sum_SimpleValues_ReturnTotalValue() {
             //Arrange
-            
+
             //değişkenleri initialize ettiğimiz yer. İlk değer vereceğim veya nesne örneği oluşturacağım yer
 
             int a = 5;
@@ -150,19 +150,36 @@ namespace UnitTest.Test {
 
         /*
         -> Verify(): Bir methodun kaç kez çalışığını test etmek için kullanılır.
-
          */
 
         [Theory]
-        [InlineData(5,0)]
+        [InlineData(5, 0)]
         public void Divide_ZeroDivisor_ThrowsDivideByZeroException(int a, int b) {
             // Arrange
             myMock.Setup(c => c.Divide(a, b)).Throws(new DivideByZeroException("0'a bölme işlemi yapılamaz"));
-            // Act
-            //var result = calculator.Divide(a,b);
+            // Act            
             // Assert
             DivideByZeroException ex = Assert.Throws<DivideByZeroException>(() => calculator.Divide(a, b));
             Assert.Equal("0'a bölme işlemi yapılamaz", ex.Message);
+        }
+
+
+        [Theory]
+        [InlineData(2, 5, 10)]
+        //[InlineData(10, 5, 50)]
+        public void Multiplate_AnyValues_ReturnMultiplatedValue(int a, int b, int expectedMultip) {
+            // Arrange                
+            int actualMultip = 0;
+            myMock.Setup(c => c.Multiplate(It.IsAny<int>(), It.IsAny<int>())).Callback<int,int>((x,y)=> actualMultip = x*y);
+            // Act
+            calculator.Multiplate(a, b);
+           
+            // Assert
+            Assert.Equal(expectedMultip, actualMultip);
+
+
+            calculator.Multiplate(5, 10);
+            Assert.Equal(50, actualMultip);
         }
     }
 }
